@@ -1,16 +1,20 @@
-import { loadCSV } from "../utils/loadCSV.js";
+import mongoose from "../db/mongoose.js";
 
 
 let salesData = [];
 
-// Load CSV on server start
-(async () => {
-  salesData = await loadCSV();
-  console.log("Sales data loaded:", salesData.length, "records");
-})();
+const loadSalesFromDb = async () => {
+  const db = mongoose.connection.db;
+  const collection = db.collection("sales");
+  const docs = await collection.find({}).toArray();
+  salesData = docs;
+};
 
 
 export const filterAndSearchSales = async (query) => {
+  if (salesData.length === 0 && mongoose.connection.readyState === 1) {
+    await loadSalesFromDb();
+  }
   let data = [...salesData];
 
   /* ----------------------------------
