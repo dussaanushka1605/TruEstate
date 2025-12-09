@@ -1,9 +1,9 @@
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_BACKEND_URL
-    ? `${import.meta.env.VITE_BACKEND_URL}/api`
-    : "http://localhost:5000/api",
+  baseURL: `${API_URL}/api`,
 });
 
 export const fetchSales = (params) =>
